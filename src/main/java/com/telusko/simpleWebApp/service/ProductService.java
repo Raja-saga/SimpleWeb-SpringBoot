@@ -19,47 +19,26 @@ public class ProductService {
     @Autowired
     ProductRepo repo;
 
-    List<Product> products = new ArrayList<>(Arrays.asList(
-            new Product(101,"iphone",1000),
-            new Product(102,"samsung",2000),
-            new Product(103,"nothing",12000)
-            ));
+    public List<Product> getProducts(){
+        //return products;
+        return repo.findAll();
+    }
 
     public Product getProductById(int prodId) {
-        return products.stream()
-                .filter(p -> p.getProdId() == prodId)
-//                .findFirst().get();
-                .findFirst().orElse(new Product(100,"No item",0));
+        return repo.findById(prodId).orElse(new Product());
     }
 
     public void addProduct(Product prod){
-        products.add(prod);
+        repo.save(prod);
     }
 
     public void updateProduct(Product prod) {
-        int index = 0;
-        for(int i=0;i<products.size();i++){
-            if(products.get(i).getProdId() == prod.getProdId()){
-                index = i;
-            }
-        }
-        products.set(index,prod);
+
+        repo.save(prod);
     }
     public void deleteProduct(int prodId){
-        int index = 0;
-        boolean flag=false;
-        for(int i=0;i<products.size();i++){
-            if(products.get(i).getProdId() == prodId){
-                index = i;
-                flag = true;
-            }
-        }
-        if(flag){
-            products.remove(index);
-            System.out.println(prodId+" is Deleted");
-        }else{
-            System.out.println("Item no "+prodId+" not found");
-        }
-    }
 
+        repo.deleteById(prodId);
+
+    }
 }
